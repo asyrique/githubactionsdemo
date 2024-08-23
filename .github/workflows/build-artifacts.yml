@@ -1,0 +1,50 @@
+name: Build Artifacts
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: ./2-golang-artifacts
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            GOOS: linux
+            GOARCH: amd64
+          - os: macos-latest
+            GOOS: darwin
+            GOARCH: amd64
+          - os: windows-latest
+            GOOS: windows
+            GOARCH: amd64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: 1.23.0
+
+    - name: Build
+      run: |
+        go env -w GOOS=${{ matrix.GOOS }}
+        go env -w GOARCH=${{ matrix.GOARCH }}
+        go build -o primes-${{ matrix.GOOS }}-${{ matrix.GOARCH }} primes.go
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: primes-${{ matrix.GOOS }}-${{ matrix.GOARCH }}
+        path: primes-${{ matrix.GOOS }}-${{ matrix.GOARCH }}

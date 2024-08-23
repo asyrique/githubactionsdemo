@@ -21,7 +21,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
-      - run: gh issue close "$NUMBER" --comment "Byeeeeeeeeeee"
+      - run: gh issue close "$NUMBER" --comment "Byeeeeeeeeeee" --reason "not planned"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}

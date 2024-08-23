@@ -1,0 +1,23 @@
+name: Get Latest Public Repositories
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs every hour
+  workflow_dispatch:
+
+jobs:
+  call-github-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call GitHub API to fetch latest public repositories
+        run: |
+          gh api \
+            -H "Accept: application/vnd.github.v3+json" \
+            /repositories > latest_repos.json
+          echo "Latest public repositories:"
+          echo jq '.[].full_name' latest_repos.json
+      - name: Upload latest public repositories as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-public-repos
+          path: latest_repos.json

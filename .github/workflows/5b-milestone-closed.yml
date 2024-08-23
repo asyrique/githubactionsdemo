@@ -1,0 +1,17 @@
+name: Close Milestone
+
+on:
+  repository_dispatch:
+    types: [close-milestone]
+
+jobs:
+  close-milestone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close milestone
+        run: |
+          curl -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/milestones/${{ github.event.client_payload.milestone_number }} \
+            -d '{"state":"closed"}'

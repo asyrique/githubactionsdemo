@@ -1,0 +1,37 @@
+name: Milestone Created
+
+on:
+  milestone:
+    types: [created]
+
+jobs:
+  create-issue-and-trigger-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check milestone title
+        id: check_milestone
+        run: |
+          if [[ "${{ github.event.milestone.title }}" == *"2.0"* ]]; then
+            echo "Milestone contains 2.0"
+          else
+            echo "Milestone does not contain 2.0"
+            exit 0
+          fi
+
+      - name: Create issue
+        if: steps.check_milestone.outputs.result == 'Milestone contains 2.0'
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/issues \
+            -d '{"title":"Really?","body":"No.","milestone":${{ github.event.milestone.number }}}'
+
+      - name: Trigger Close Milestone
+        if: steps.check_milestone.outputs.result == 'Milestone contains 2.0'
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/dispatches \
+            -d '{"event_type":"close-milestone","client_payload":{"milestone_number":${{ github.event.milestone.number }}}}'

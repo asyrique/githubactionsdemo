@@ -10,13 +10,21 @@ jobs:
     permissions:
       issues: write
     steps:
-      - run: gh issue edit "$NUMBER" --add-label "$LABELS"
+      - name: Check if issue is a feature request
+        id: check_issue
+        run: |
+          echo "##[set-output name=is_feature;]$(echo "${{ github.event.issue.title }} ${{ github.event.issue.body }}" | grep -i 'feature\|enhancement\|add' || echo 'false')"
+      - name: Label issue
+        if: steps.check_issue.outputs.is_feature != 'false'
+        run: gh issue edit "$NUMBER" --add-label "$LABELS"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           NUMBER: ${{ github.event.issue.number }}
           LABELS: wontfix
-      - run: gh issue comment "$NUMBER" --body "Hey @${{ github.event.issue.user.login }}, This is a demo repo, so no issues will be entertained. Feel free to fork it!"
+      - name: Comment on issue
+        if: steps.check_issue.outputs.is_feature != 'false'
+        run: gh issue comment "$NUMBER" --body "Hey @${{ github.event.issue.user.login }}, This is a demo repo, so no issues will be entertained. Feel free to fork it!"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}

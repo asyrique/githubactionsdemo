@@ -1,4 +1,4 @@
-name: Close Milestone
+name: 5b. Close Milestone
 
 on:
   repository_dispatch:

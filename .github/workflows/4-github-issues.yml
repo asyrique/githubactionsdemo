@@ -1,4 +1,4 @@
-name: Manage issues
+name: 4. Manage issues
 on:
   issues:
     types:

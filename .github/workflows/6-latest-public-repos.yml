@@ -1,4 +1,4 @@
-name: Get Latest Public Repositories
+name: 6. Get Latest Public Repositories
 
 on:
   schedule:

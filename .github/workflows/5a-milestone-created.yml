@@ -27,6 +27,8 @@ jobs:
           --title "Really?" \
           --body "Naaaahhh" \
           --milestone ${{ github.event.milestone.number }}
+        env:
+          GH_TOKEN: ${{ github.token }}
 
       - name: Trigger Close Milestone
         if: steps.check_milestone.outputs.contains_2_0 == 'true'
@@ -36,3 +38,5 @@ jobs:
             -F event_type=close-milestone \
             -F client_payload='{"milestone_number":${{ github.event.milestone.number }}}' \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+        env:
+          GH_TOKEN: ${{ github.token }}

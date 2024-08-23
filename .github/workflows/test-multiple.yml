@@ -1,4 +1,4 @@
-name: Node.js v20 Run Test
+name: Node.js v14, v16, v18, v20 Run Test
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [14,16,18,20]
 
     steps:
       - name: Checkout repository

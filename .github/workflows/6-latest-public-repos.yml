@@ -14,8 +14,9 @@ jobs:
           gh api \
             -H "Accept: application/vnd.github.v3+json" \
             /repositories > latest_repos.json
-          echo "Latest public repositories:"
-          echo jq '.[].full_name' latest_repos.json
+            jq '.[].full_name' latest_repos.json > repo_names.txt
+            echo "Latest public repositories:"
+            cat repo_names.txt
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Upload latest public repositories as artifact

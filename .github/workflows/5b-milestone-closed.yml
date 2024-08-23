@@ -17,5 +17,22 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             /repos/${{ github.repository }}/milestones/${{ github.event.client_payload.milestone_number }} \
             -F state="closed"
+
+            # Get the list of issues associated with the milestone
+            ISSUES=$(gh api \
+              -H "Accept: application/vnd.github.v3+json" \
+              /repos/${{ github.repository }}/issues \
+              -F milestone=${{ github.event.client_payload.milestone_number }} \
+              -F state=open \
+              --jq '.[].number')
+
+            # Close each issue associated with the milestone
+            for ISSUE in $ISSUES; do
+              gh api \
+                -X PATCH \
+                -H "Accept: application/vnd.github.v3+json" \
+                /repos/${{ github.repository }}/issues/$ISSUE \
+                -F state="closed"
+            done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

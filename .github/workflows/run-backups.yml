@@ -29,11 +29,13 @@ jobs:
 
     - name: Create backup archive
       run: |
-        zip -r backup.zip .
+        TIMESTAMP=$(date +'%Y%m%d%H%M%S')
+        zip -r backup-$TIMESTAMP.zip .
 
     - name: Upload to S3
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        aws s3 cp backup.zip s3://your-s3-bucket-name/backup.zip
+        TIMESTAMP=$(date +'%Y%m%d%H%M%S')
+        aws s3 cp backup-$TIMESTAMP.zip s3://github-actions-demo-asyrique/backup-$TIMESTAMP.zip

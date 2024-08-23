@@ -44,7 +44,7 @@ jobs:
         go build -o primes-${{ matrix.GOOS }}-${{ matrix.GOARCH }} primes.go
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: primes-${{ matrix.GOOS }}-${{ matrix.GOARCH }}
         path: ./2-golang-artifacts/primes-${{ matrix.GOOS }}-${{ matrix.GOARCH }}

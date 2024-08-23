@@ -26,7 +26,7 @@ jobs:
           gh issue create \
           --title "Really?" \
           --body "Naaaahhh" \
-          --milestone ${{ github.event.milestone.number }}
+          --milestone "${{ github.event.milestone.title }}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

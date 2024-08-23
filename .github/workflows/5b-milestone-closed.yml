@@ -11,11 +11,11 @@ jobs:
       issues: write
     steps:
       - name: Close milestone
-      run: |
-        gh api \
-          -X PATCH \
-          -H "Accept: application/vnd.github.v3+json" \
-          /repos/${{ github.repository }}/milestones/${{ github.event.client_payload.milestone_number }} \
-          -F state="closed"
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api \
+            -X PATCH \
+            -H "Accept: application/vnd.github.v3+json" \
+            /repos/${{ github.repository }}/milestones/${{ github.event.client_payload.milestone_number }} \
+            -F state="closed"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

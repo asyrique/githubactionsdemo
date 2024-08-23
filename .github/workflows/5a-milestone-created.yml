@@ -23,17 +23,16 @@ jobs:
       - name: Create issue
         if: steps.check_milestone.outputs.contains_2_0 == 'true'
         run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/issues \
-            -d '{"title":"Really?","body":"No.","milestone":${{ github.event.milestone.number }}}'
+          gh issue create \
+          --title "Really?" \
+          --body "Naaaahhh" \
+          --milestone ${{ github.event.milestone.number }}
 
       - name: Trigger Close Milestone
         if: steps.check_milestone.outputs.contains_2_0 == 'true'
         run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/dispatches \
-            -d '{"event_type":"close-milestone","client_payload":{"milestone_number":${{ github.event.milestone.number }}}}'
+          gh api repos/${{ github.repository }}/dispatches \
+            -X POST \
+            -F event_type=close-milestone \
+            -F client_payload='{"milestone_number":${{ github.event.milestone.number }}}' \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"

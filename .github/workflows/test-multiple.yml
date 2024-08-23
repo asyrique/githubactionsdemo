@@ -12,11 +12,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./2-node-tests
     strategy:
       matrix:
         node-version: [14,16,18,20]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

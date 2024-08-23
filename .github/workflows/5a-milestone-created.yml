@@ -7,6 +7,8 @@ on:
 jobs:
   create-issue-and-trigger-workflow:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Check milestone title
         id: check_milestone

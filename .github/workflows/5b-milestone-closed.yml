@@ -7,11 +7,15 @@ on:
 jobs:
   close-milestone:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Close milestone
-        run: |
-          curl -X PATCH \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/milestones/${{ github.event.client_payload.milestone_number }} \
-            -d '{"state":"closed"}'
+      run: |
+        gh api \
+          -X PATCH \
+          -H "Accept: application/vnd.github.v3+json" \
+          /repos/${{ github.repository }}/milestones/${{ github.event.client_payload.milestone_number }} \
+          -F state="closed"
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

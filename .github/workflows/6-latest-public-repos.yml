@@ -16,6 +16,8 @@ jobs:
             /repositories > latest_repos.json
           echo "Latest public repositories:"
           echo jq '.[].full_name' latest_repos.json
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Upload latest public repositories as artifact
         uses: actions/upload-artifact@v4
         with:

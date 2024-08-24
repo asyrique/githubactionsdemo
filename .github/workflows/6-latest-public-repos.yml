@@ -1,8 +1,8 @@
 name: 6. Get Latest Public Repositories
 
 on:
-  schedule:
-    - cron: '27 * * * *' # Runs every hour
+  # schedule:
+  #   - cron: '27 * * * *' # Runs every hour
   workflow_dispatch:
 
 jobs:
